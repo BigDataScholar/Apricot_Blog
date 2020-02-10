@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Apricot 1.3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <script type="text/javascript" src="assets/js/jquery.js"></script>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/loader-style.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+
+
+
+    <link rel="stylesheet" href="assets/css/mail.css">
+
+
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/minus.png">
+</head>
+<script>
+
+    $(function () {
+
+        $("div[id='mymenu']").load("model.html")
+
+        $.ajax({
+
+
+            url:"getUser",
+            type:"get",
+            dataType:"JSON",
+            statusCode:{
+                200:function (rel) {
+
+                    $("div[class='col-sm-7']").html("<div class=\"devider-vertical visible-lg\"></div>\n" +
+                        "                    <div class=\"tittle-middle-header\">\n" +
+                        "\n" +
+                        "                        <div class=\"alert\">\n" +
+                        "                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>\n" +
+                        "                            <span class=\"tittle-alert entypo-info-circled\"></span>\n" +
+                        "                            Welcome back,&nbsp;\n" +
+                        "                            <strong>"+rel.username+"!</strong>&nbsp;&nbsp;\n" +
+                        "                        </div>\n" +
+                        "\n" +
+                        "\n" +
+                        "                    </div>")
+
+
+
+                },
+                500:function () {
+
+                    window.location.href="/500.html";
+
+
+                }
+            }
+        })
+    })
+</script>
+
+<body>
+<script>
+
+    //展示邮件的信息
+    function showEmails(code){
+
+
+        var params={
+            sendemailstatus:code
+        };
+
+        $.ajax({
+
+
+            url:"findSomeEmails",
+            type:"get",
+            data:params,
+            dataType:"json",
+            statusCode:{
+
+                200:function (rel) {
+
+                    //  在每一次遍历循环之前,都要先把之前的旧内容删除
+                    $("table[class='table table-mailbox']").html("")
+
+                    //把全选状态的复选框变成非选中状态
+                    $("input[id='all']").prop("checked",false);
+
+                    $(rel).each(function (index,ele) {
+
+
+                        if (ele.user.usertypeid === 1){
+                            //faceBook
+                            $("table[class='table table-mailbox']").append("<tr class=\"unread\">\n" +
+                                "                                        <td class=\"small-col\">\n" +
+                                "                                            <input class=\"all_children\" value='"+ele.receiveemailid+"' type=\"checkbox\">\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"small-col\"><i class=\"fa fa-star\"></i>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"name\"><a class=\"star\" href=\"#\"><i class=\"fa fa-facebook\"></i></a>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td>Facebook</td>\n" +
+                                "                                        <td class=\"subject\">\n" +
+                                "                                            <p class=\"email-summary\">\n" +
+                                "                                                "+ele.receiveemailcontent+"</p>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"time text-right\">"+new Date(ele.receiveemaildate).toLocaleDateString()+"</td>\n" +
+                                "                                    </tr>")
+
+                        }else if (ele.user.usertypeid === 2){
+                            //twitter
+                            $("table[class='table table-mailbox']").append("<tr class=\"unread\">\n" +
+                                "                                        <td class=\"small-col\">\n" +
+                                "                                            <input class=\"all_children\" value='"+ele.receiveemailid+"' type=\"checkbox\">\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"small-col\"><i class=\"fa fa-star\"></i>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"name\"><a class=\"star\" href=\"#\"><i class=\"fa fa-twitter\"></i></a>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td>Twitter</td>\n" +
+                                "                                        <td class=\"subject\">\n" +
+                                "                                            <p class=\"email-summary\">\n" +
+                                "                                                "+ele.receiveemailcontent+"</p>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"time text-right\">"+new Date(ele.receiveemaildate).toLocaleDateString()+"</td>\n" +
+                                "                                    </tr>")
+
+
+                        } else if (ele.user.usertypeid === 3) {
+                            //google
+                            $("table[class='table table-mailbox']").append("<tr class=\"unread\">\n" +
+                                "                                        <td class=\"small-col\">\n" +
+                                "                                            <input class=\"all_children\" value='"+ele.receiveemailid+"' type=\"checkbox\">\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"small-col\"><i class=\"fa fa-star\"></i>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"name\">\n" +
+                                "                                            <a class=\"star\" href=\"#\">\n" +
+                                "                                                <span class=\"entypo-user\"></span>\n" +
+                                "                                            </a>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td>Google</td>\n" +
+                                "                                        <td class=\"subject\">\n" +
+                                "                                            <p class=\"email-summary\">\n" +
+                                "                                               "+ele.receiveemailcontent+"</p>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"time text-right\">"+new Date(ele.receiveemaildate).toLocaleDateString()+"</td>\n" +
+                                "                                    </tr>")
+
+
+                        }else if (ele.user.usertypeid === 4) {
+                            //Instagram
+                            $("table[class='table table-mailbox']").append("<tr class=\"unread\">\n" +
+                                "                                        <td class=\"small-col\">\n" +
+                                "                                            <input class=\"all_children\" value='"+ele.receiveemailid+"' type=\"checkbox\">\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"small-col\"><i class=\"fa fa-star\"></i>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"name\">\n" +
+                                "                                            <a class=\"star\" href=\"#\">\n" +
+                                "                                                <span class=\"entypo-instagrem\"></span>\n" +
+                                "                                            </a>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td>Instagram</td>\n" +
+                                "                                        <td class=\"subject\">\n" +
+                                "                                            <p class=\"email-summary\">\n" +
+                                "                                               "+ele.receiveemailcontent+"</p>\n" +
+                                "                                        </td>\n" +
+                                "                                        <td class=\"time text-right\">"+new Date(ele.receiveemaildate).toLocaleDateString()+"</td>\n" +
+                                "                                    </tr>")
+
+                        }
+
+
+                    })
+
+
+                }
+            }
+        })
+
+    }
+
+    //刷新页面
+    function fresh() {
+
+        window.location.href = "mail.html";
+
+    }
+</script>
+<script>
+
+    //页面加载完毕,马上去后台获取不同状态邮件的数量
+    $(function () {
+
+        $.ajax({
+
+            url:"findAllCounts",
+            type:"get",
+            dataType:"json",
+            statusCode:{
+                200:function (rel) {
+
+                    var num = 0;
+                    $(rel).each(function (index,ele) {
+
+                        num ++;
+
+                        if (num==1){
+                            //收件箱的个数
+                            $("i[id='receive_emails']").html(ele)
+
+                        } else if (num==2){
+                            //草稿箱的个数
+                            $("i[id='deaft_emails']").html(ele)
+
+                        } else if (num==3){
+                            //发件箱的个数
+                            $("i[id='sent_emails']").html(ele)
+
+                        } else if (num==4){
+                            //垃圾箱的个数
+                            $("i[id='trash_emails']").html(ele)
+
+                        }
+
+
+                    })
+
+
+                },
+                500:function () {
+
+                    alert("服务器异常!")
+
+                }
+            }
+        })
+
+    })
+</script>
+<script>
+
+    //点击发送邮件按钮时触发
+    function sendEmails(rel) {
+
+        var params ={
+            receiveusermail:$("input[id='exampleInputEmail1']").val(),
+            receiveemailcontent:$("textarea[name='receiveemailcontent']").val(),
+            choice:rel
+        }
+
+        $.ajax({
+
+            url:"sendEmails",
+            type:"get",
+            data:params,
+            statusCode:{
+                201:function () {
+
+                    alert("发送成功!")
+                    //刷新页面
+                    window.location.reload("mail.html");
+
+                },
+                500:function () {
+
+                    alert("服务器异常!")
+
+                }
+            }
+
+        })
+    }
+
+
+    //点击删除按钮时触发该事件
+    function delLER() {
+
+        //新建一个数组,用来保存需要删除邮件的id
+
+        //根据选中的个数确实需要创建数组的长度
+        var arr = new Array($("input[type='checkbox'][class='all_children']:checked").size());
+
+        $("input[type='checkbox'][class='all_children']:checked").each(function (index,ele) {
+
+            arr[index]=$(this).val();
+
+        })
+
+
+        //把数组作为参数通过ajax传递至后台
+        var params ={
+            par:arr
+        }
+
+        $.ajax({
+
+            url:"deleteEmails",
+            type:"post",
+            traditional: true,
+            data:params,
+            statusCode:{
+
+                204:function () {
+
+                    //刷新页面
+                    alert("删除成功!")
+                    window.location.reload("mail.html")
+
+                },
+                500:function () {
+
+                    alert("服务器异常!")
+
+                }
+            }
+
+        })
+
+
+        alert("删除成功!")
+
+    }
+
+</script>
+<script>
+
+    $(function () {
+
+        //当页面上的【全选按钮】被点击时,触发该事件
+        $("input[id='all']").click(function () {
+
+             //判断当前复选框的状态
+            var  flag = $(this).prop("checked")
+
+
+            if (flag===true){
+            //若当前为选中状态,则把其下的子复选框全部选中
+                $("input[class='all_children']").prop("checked",true)
+
+            } else{
+             //若当前为非选中状态,则把其下的子复选框改为非选中
+                $("input[class='all_children']").prop("checked",false)
+
+            }
+
+
+        })
+
+    })
+</script>
+<div id="mymenu"></div>
+    <!-- END OF SIDE MENU -->
+
+
+
+    <!--  PAPER WRAP -->
+    <div class="wrap-fluid">
+        <div class="container-fluid paper-wrap bevel tlbr">
+
+
+
+
+
+            <!-- CONTENT -->
+            <!--TITLE -->
+            <div class="row">
+                <div id="paper-top">
+                    <div class="col-sm-3">
+                        <h2 class="tittle-content-header">
+                            <i class="icon-mail"></i> 
+                            <span>Mail
+                            </span>
+                        </h2>
+
+                    </div>
+
+                    <div class="col-sm-7">
+                        <div class="devider-vertical visible-lg"></div>
+                        <div class="tittle-middle-header">
+
+                            <div class="alert">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <span class="tittle-alert entypo-info-circled"></span>
+                                Welcome back,&nbsp;
+                                <strong>Dave mattew!</strong>&nbsp;&nbsp;Your last sig in at Yesterday, 16:54 PM
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+            <!--/ TITLE -->
+
+            <!-- BREADCRUMB -->
+            <ul id="breadcrumb">
+                <li>
+                    <span class="entypo-home"></span>
+                </li>
+                <li><i class="fa fa-lg fa-angle-right"></i>
+                </li>
+                <li><a href="#" title="Sample page 1">Home</a>
+                </li>
+                <li><i class="fa fa-lg fa-angle-right"></i>
+                </li>
+                <li><a href="#" title="Sample page 1">Mail</a>
+                </li>
+                <li class="pull-right">
+                    <div class="input-group input-widget">
+
+                        <input style="border-radius:15px" type="text" placeholder="Search..." class="form-control">
+                    </div>
+                </li>
+            </ul>
+
+            <!-- END OF BREADCRUMB -->
+
+
+
+            <div class="content-wrap">
+                <div class="row">
+                    <!-- SIDEMENU MAIL -->
+                    <div class="col-sm-2">
+                        <div class="side-mail">
+                            <div class="btn btn-info button-mail" data-toggle="modal" data-target="#myModal"><i class="entypo-pencil"></i>&nbsp;&nbsp;Compose Mail</div>
+                            <div class="list-btn-mail active">
+                                <span class="entypo-download"></span><a href="#" onclick="showEmails(0)">Inbox</a><i id="receive_emails">648</i>
+                            </div>
+                            <div class="list-btn-mail">
+                                <span class="entypo-floppy"></span><a href="#" onclick="showEmails(1)">Draft</a><i id="deaft_emails">5</i>
+                            </div>
+                            <div class="list-btn-mail">
+                                <span class="entypo-logout"></span><a href="#" onclick="showEmails(2)">Sent</a><i id="sent_emails">648</i>
+                            </div>
+                            <div class="list-btn-mail">
+                                <span class="entypo-trash"></span><a href="#" onclick="showEmails(3)">Trash</a><i id="trash_emails">648</i>
+                            </div>
+
+                        </div>
+
+
+
+
+                        <!--   模态框  myModal  -->
+                        <div aria-labelledby="myLargeModalLabel" role="dialog" tabindex="-1" class="modal fade bs-example-modal-lg" style="display: none;" id="myModal">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                                            <span class="entypo-cancel"></span>
+                                        </button>
+                                        <h6 id="myLargeModalLabel" class="modal-title">Compose Mail</h6>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="compose_mail">
+
+                                            <form role="form">
+                                                <div class="form-group">
+
+                                                    <input type="email" placeholder="收件人的邮箱" id="exampleInputEmail1" class="form-control">
+                                                </div>
+
+                                                <div class="form-group">
+
+                                                    <input type="email" placeholder="主题" id="exampleInputPassword1" class="form-control">
+
+                                                </div>
+
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" class="btn dropdown-toggle" type="button">
+                                                        <span class="fontawesome-font"></span>Normal text
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul role="menu" class="dropdown-menu">
+                                                        <li><a href="#">Action</a>
+                                                        </li>
+                                                        <li><a href="#">Another action</a>
+                                                        </li>
+                                                        <li><a href="#">Something else here</a>
+                                                        </li>
+
+                                                    </ul>
+
+                                                </div>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn">
+                                                        <span class="fontawesome-bold"></span>
+                                                    </button>
+                                                    <button type="button" class="btn">
+                                                        <span class="fontawesome-italic"></span>
+                                                    </button>
+                                                    <button type="button" class="btn">
+                                                        <span class="fontawesome-underline"></span>
+                                                    </button>
+                                                </div>
+
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn">
+                                                        <span class="fontawesome-list-ul"></span>
+                                                    </button>
+                                                    <button type="button" class="btn">
+                                                        <span class="fontawesome-list-ol"></span>
+                                                    </button>
+                                                    <button type="button" class="btn">
+                                                        <span class="fontawesome-indent-left"></span>
+                                                    </button>
+                                                    <button type="button" class="btn">
+                                                        <span class="fontawesome-indent-right"></span>
+                                                    </button>
+
+                                                </div>
+
+
+                                                <button type="button" class="btn">
+                                                    <span class="entypo-link"></span>
+                                                </button>
+                                                <button type="button" class="btn">
+                                                    <span class="entypo-attach"></span>
+                                                </button>
+                                                <button type="button" class="btn">
+                                                    <span class="fontawesome-table"></span>
+                                                </button>
+                                                <button type="button" class="btn">
+                                                    <span class="fontawesome-camera"></span>
+                                                </button>
+
+
+                                                <!--   邮件的具体内容   -->
+                                                <textarea name="receiveemailcontent" style="height:200px!important;margin:20px 0" class="form-control" rows="8"></textarea>
+
+
+                                                <!--  发送邮件  -->
+                                                <button class="btn" type="button" onclick="sendEmails(1)">Send</button>
+                                                <!--  添加邮件至草稿箱   -->
+                                                <button class="btn" type="button" onclick="sendEmails(2)">
+                                                    <span class="fontawesome-save"></span>Save as Draft</button>
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                    <!-- /SIDEMENU MAIL -->
+                    <!-- CONTENT MAIL -->
+                    <div class="col-sm-10">
+
+                        <div class="mail_header">
+                            <div class="row">
+                                <div class="col-sm-6">
+
+                                    <div style="margin-right:10px" class="btn-group pull-left">
+                                        <div class="btn">
+                                            <input type="checkbox" id="all" style="margin:0 5px;padding:0;position:relative;top:2px;">All</div>
+                                        <!--<button type="button" class="btn dropdown-toggle" data-toggle="dropdown">-->
+                                            <!--<span class="caret"></span>-->
+                                            <!--<span class="sr-only">Toggle Dropdown</span>-->
+                                        <!--</button>-->
+                                        <!--<ul class="dropdown-menu" role="menu">-->
+                                            <!--<li><a href="#">None</a>-->
+                                            <!--</li>-->
+                                            <!--<li><a href="#">read</a>-->
+                                            <!--</li>-->
+                                            <!--<li><a href="#">Unread</a>-->
+                                            <!--</li>-->
+                                        <!--</ul>-->
+                                    </div>
+
+                                    <button onclick="fresh()" style="margin-right:10px" type="button" data-color="#39B3D7" data-opacity="0.95" class="btn button test pull-left">
+                                        <span class="entypo-arrows-ccw"></span>&nbsp;&nbsp;Refresh</button>
+                                    <div style="margin-right:10px" class="btn-group pull-left">
+                                        <button class="btn  dropdown-toggle" onclick="delLER()">Delete</button>
+
+                                </div>
+
+
+                                <div class="col-sm-6">
+
+
+
+                                    <!--<div class="btn-group pull-right">-->
+                                        <!--<button type="button" class="btn">-->
+                                            <!--<span class="entypo-left-open"></span>-->
+                                        <!--</button>-->
+                                        <!--<button type="button" class="btn">-->
+                                            <!--<span class="entypo-right-open"></span>-->
+                                        <!--</button>-->
+
+                                    <!--</div>-->
+
+                                    <!--<div class="btn-group pull-right" style="margin-right:10px;">-->
+                                        <!--<button type="button" class="btn">1-50 of 124</button>-->
+
+
+                                    <!--</div>-->
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                        <!--    以下为邮件右侧具体展示的内容     -->
+
+                        <div id="content-mail">
+                            <div class="table-responsive">
+                                <!-- THE MESSAGES -->
+                                <table class="table table-mailbox">
+
+
+
+
+
+
+                                    <!-- END OF THREE -->
+
+
+
+
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+
+
+                        </div>
+
+                    </div>
+                    <!-- /CONTENT MAIL -->
+                </div>
+            </div>
+
+
+            <!-- /END OF CONTENT -->
+
+
+
+            <!-- FOOTER -->
+            <div class="footer-space"></div>
+            <div id="footer">
+                <div class="devider-footer-left"></div>
+                <div class="time">
+                    <p id="spanDate">
+                    <p id="clock">
+                </div>
+                <div class="copyright">Make with Love
+                    <span class="entypo-heart"></span>Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a> All Rights Reserved</div>
+                <div class="devider-footer"></div>
+            </div>
+            <!-- / END OF FOOTER -->
+
+        </div>
+    </div>
+    <!--  END OF PAPER WRAP -->
+
+    <!-- RIGHT SLIDER CONTENT -->
+    <div class="sb-slidebar sb-right">
+        <div class="right-wrapper">
+            <div class="row">
+                <h3>
+                    <span><i class="entypo-gauge"></i>&nbsp;&nbsp;MAIN WIDGET</span>
+                </h3>
+                <div class="col-sm-12">
+
+                    <div class="widget-knob">
+                        <span class="chart" style="position:relative" data-percent="86">
+                            <span class="percent"></span>
+                        </span>
+                    </div>
+                    <div class="widget-def">
+                        <b>Distance traveled</b>
+                        <br>
+                        <i>86% to the check point</i>
+                    </div>
+
+                    <div class="widget-knob">
+                        <span class="speed-car" style="position:relative" data-percent="60">
+                            <span class="percent2"></span>
+                        </span>
+                    </div>
+                    <div class="widget-def">
+                        <b>The average speed</b>
+                        <br>
+                        <i>30KM/h avarage speed</i>
+                    </div>
+
+
+                    <div class="widget-knob">
+                        <span class="overall" style="position:relative" data-percent="25">
+                            <span class="percent3"></span>
+                        </span>
+                    </div>
+                    <div class="widget-def">
+                        <b>Overall result</b>
+                        <br>
+                        <i>30KM/h avarage Result</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:0;" class="right-wrapper">
+            <div class="row">
+                <h3>
+                    <span><i class="entypo-chat"></i>&nbsp;&nbsp;CHAT</span>
+                </h3>
+                <div class="col-sm-12">
+                    <span class="label label-warning label-chat">Online</span>
+                    <ul class="chat">
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-circle" src="http://api.randomuser.me/portraits/thumb/men/20.jpg">
+                                </span><b>Dave Junior</b>
+                                <br><i>Last seen : 08:00 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-circle" src="http://api.randomuser.me/portraits/thumb/men/21.jpg">
+                                </span><b>Kenneth Lucas</b>
+                                <br><i>Last seen : 07:21 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-circle" src="http://api.randomuser.me/portraits/thumb/men/22.jpg">
+                                </span><b>Heidi Perez</b>
+                                <br><i>Last seen : 05:43 PM</i>
+                            </a>
+                        </li>
+
+
+                    </ul>
+
+                    <span class="label label-chat">Offline</span>
+                    <ul class="chat">
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/men/23.jpg">
+                                </span><b>Dave Junior</b>
+                                <br><i>Last seen : 08:00 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/women/24.jpg">
+                                </span><b>Kenneth Lucas</b>
+                                <br><i>Last seen : 07:21 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/men/25.jpg">
+                                </span><b>Heidi Perez</b>
+                                <br><i>Last seen : 05:43 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/women/25.jpg">
+                                </span><b>Kenneth Lucas</b>
+                                <br><i>Last seen : 07:21 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/men/26.jpg">
+                                </span><b>Heidi Perez</b>
+                                <br><i>Last seen : 05:43 PM</i>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- END OF RIGHT SLIDER CONTENT-->
+
+
+
+
+</body>
+
+</html>

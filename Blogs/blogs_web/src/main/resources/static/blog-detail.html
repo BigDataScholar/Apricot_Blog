@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Apricot v 1.2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <script type="text/javascript" src="assets/js/jquery.js"></script>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/loader-style.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/media.css">
+    <link rel="stylesheet" href="assets/css/social.css">
+
+
+
+
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/minus.png">
+</head>
+<script>
+    $(function () {
+
+        $("div[id='mymenu']").load("model.html")
+
+    })
+</script>
+<script>
+
+    $.ajax({
+
+        url: "getUser",
+        type: "get",
+        dataType: "json",
+        statusCode: {
+
+            200: function (rel) {
+
+                // 中间模板拼接
+                $("div[class='col-sm-7']").append(" <div class=\"devider-vertical visible-lg\"></div>\n" +
+                    "                        <div class=\"tittle-middle-header\">\n" +
+                    "\n" +
+                    "                            <div class=\"alert\">\n" +
+                    "                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>\n" +
+                    "                                <span class=\"tittle-alert entypo-info-circled\"></span>\n" +
+                    "                                Welcome back,&nbsp;\n" +
+                    "                                <strong>" + rel.username + "</strong>&nbsp;&nbsp;\n" +
+                    "                            </div>\n" +
+                    "\n" +
+                    "\n" +
+                    "                        </div>")
+            },
+
+            500: function () {
+
+                alert("服务器异常!")
+            }
+
+        }
+    })
+
+</script>
+<script>
+
+    /**
+     * 获取所有的博客标签
+     */
+    $(function () {
+
+        //发送ajax获取所有的博客标签
+        $.ajax({
+
+
+            url:"findAllBorkey",
+            type:"get",
+            dataType:"JSON",
+            statusCode:{
+                200:function (rel) {
+
+                    $(rel).each(function (index,ele) {
+
+                        $("ul[id='blog_key']").append("<li>\n" +
+                            "                                <a class=\"btn btn-info\" href=\"blog-list.html#"+ele.keyname+"\">"+ele.keyname +"</a>\n" +
+                            "                            </li>")
+
+                    })
+
+
+
+
+
+
+                },
+                500:function () {
+
+                    alert("服务器异常!")
+
+                }
+            }
+        })
+
+    })
+
+</script>
+<script>
+
+    /**
+     * 拼接作者信息
+     */
+    $(function () {
+
+        $.ajax({
+
+            url: "getUser",
+            type: "get",
+            dataType: "json",
+            statusCode:{
+                200:function (rel) {
+
+                    $(rel).each(function (index,ele) {
+
+
+                        $("div[class='col-sm-4']").prepend(" <div class=\"panel panel-default\">\n" +
+                            "                        <img class=\"media-object img-circle blog-profile\" data-src=\"holder.js/64x64\" alt=\"64x64\" style='height: 100px ;width: 75px;' src=\""+ele.userphoto+"\">\n" +
+                            "                        <hr style=\"margin:0;\">\n" +
+                            "\n" +
+                            "                        <div class=\"panel-body\">\n" +
+                            "                            <p class=\"lead text-center\">"+ele.username+"</p>\n" +
+                            "                            <p class=\"tex-center social-blog-profile\">\n" +
+                            "                                <a href=\"#\">\n" +
+                            "                                    <span class=\"entypo-facebook-circled\"></span>\n" +
+                            "                                </a>\n" +
+                            "                                <a class=\"tweet-link\" href=\"#\">\n" +
+                            "                                    <span class=\"entypo-twitter-circled\"></span>\n" +
+                            "                                </a>\n" +
+                            "                                <a class=\"gplus-textcolor\" href=\"#\">\n" +
+                            "                                    <span class=\"entypo-instagrem\"></span>\n" +
+                            "                                </a>\n" +
+                            "\n" +
+                            "                            </p>\n" +
+                            "                            <p class=\"social-follower text-center\">A graphics designer, a web developer, a boyfriend, a friend, a son</p>\n" +
+                            "\n" +
+                            "\n" +
+                            "                        </div>\n" +
+                            "                    </div>")
+                    })
+
+                },
+                500:function () {
+
+                    alert("服务器异常!")
+
+                }
+            }
+        })
+    })
+</script>
+<script>
+    /**
+     * 获取热门博客
+     */
+    $(function () {
+
+        $.ajax({
+
+            url:"findHot",
+            type:"get",
+            dataType:"JSON",
+            statusCode: {
+
+                200:function (rel) {
+
+                    $(rel).each(function (index,ele) {
+
+                        $("div[id='hots']").append("<div class=\"media\">\n" +
+                            "                            <a class=\"pull-left\" href=\"blog-detail.html#"+ele.borgename+"\">\n" +
+                            "                                <img class=\"media-object img-responsive-media\" data-src=\"holder.js/64x64\" alt=\"64x64\" style='height: 64px;width: 64px' src="+ele.borgeimg+">" +
+                            "                            </a>\n" +
+                            "                            <div class=\"media-body\">\n" +
+                            "                                <h5 class=\"media-heading\">"+ele.borgename+"</h5>\n" +
+                            "                                <a class=\"link-comment recentpost-link\" style=\"margin:-10px 0 10px\" href=\"#\">"+ele.borgereadnum+" Views</a>\n" +
+                            "                            </div>\n" +
+                            "                        </div>")
+
+                    })
+
+                }
+
+            }
+        })
+
+
+    })
+</script>
+<script>
+
+    $(function () {
+
+        $.ajax({
+
+            url:"findAllBorge",
+            type:"get",
+            dataType:"JSON",
+            statusCode:{
+
+                200:function (rel) {
+
+                    var num =  0;
+                    $(rel).each(function (index,ele) {
+
+                        num++;
+                        $("div[class='col-sm-8']").append("<a name="+ele.borgename+"></a><div class=\"blog-list-nest\">\n" +
+                            "                        <div class=\"vendor\">\n" +
+                            "                            <img class=\"img-responsive-media\" alt='123' src="+ele.borgeimg+">" +
+                            "                        </div>\n" +
+                            "\n" +
+                            "                        <div class=\"blog-list-content\">\n" +
+                            "                            <h2>"+ele.borgename+"</h2>\n" +"<p>"+ele.borgecontent+"</p>"+
+                            "                   " +
+                            "\n" +
+                            "                            <p class=\"pull-right\" id='"+num+"'>\n" +
+                            "                            </p>\n" +
+                            "                            <ul class=\"list-inline\">\n" +
+                            "                                <li>\n" +
+                            "                                    <a href=\"#\">\n" +
+                            "                                        <span class=\"entypo-network\"></span>&nbsp;"+new Date(ele.borgedate).toLocaleDateString()+new Date(ele.borgedate).toLocaleTimeString()+"</a>\n" +
+                            "                                </li>\n" +
+                            "                                <li>\n" +
+                            "                                    <a href=\"#\">\n" +
+                            "                                        <span class=\"entypo-chat\"></span>&nbsp;"+ele.borgecomnum+" Comments</a>\n" +
+                            "                                </li>\n" +
+                            "                                <li>\n" +
+                            "                                    <a href=\"#\">\n" +
+                            "                                        <span class=\"entypo-share\"></span>&nbsp;"+ele.borgereadnum+" Shares</a>\n" +
+                            "                                </li>\n" +
+                            "                            </ul>\n" +
+                            "                            <hr>\n" +
+                            "                           \n" +
+                            "                            <div style=\"clear:both;\"></div>\n" +
+                            "                        </div>\n" +
+                            "                    </div>")
+
+
+
+                        //  每一篇博客下对应的评论区
+                        $("div[class='col-sm-8']").append("<div class=\"comment-nest\" id='"+num+"'>\n" +
+                            "                        <h1>Leave a Comment:</h1>\n" +
+                            "                        <div class=\"well\">\n" +
+                            "\n" +
+                            "                            <form role=\"form\">\n" +
+                            "                                <div class=\"form-group\">\n" +
+                            "                                    <textarea id='"+ele.borgeid+"' placeholder=\"Comment\" rows=\"5\" class=\"form-update\"></textarea>\n" +
+                            "                                </div>\n" +
+                            "                                <button type=\"button\" class=\"btn btn-info\" onclick='adds("+ele.borgeid+")'>Submit</button>\n" +
+                            "                            </form>\n" +
+                            "                        </div></div>")
+
+
+                        $("div[class='comment-nest'][id='"+num+"']").append("<ul class='media-list' id='"+num+"'></ul>")
+
+                        //遍历博客的评论列表
+                        $(ele.list).each(function (index,es) {
+
+                            $("ul[id='"+ele.borgeid+"']").append("<li class=\"media\">\n" +
+                                "\n" +
+                                "                                <a class=\"pull-left\" href=\"#\">\n" +
+                                "                                    <img class=\"media-object img-circle\" data-src=\"holder.js/64x64\" alt=\"64x64\" src=\""+es.user.userphoto+"\" style=\"width: 64px; height: 64px;\">\n" +
+                                "                                </a>\n" +
+                                "\n" +
+                                "\n" +
+                                "\n" +
+                                "\n" +
+                                "                                <div class=\"media-body\">\n" +
+                                "\n" +
+                                "                                    <div class=\"social-profile\">\n" +
+                                "                                        <h3> <a class=\"link-comment\" href=\"#\">"+es.user.username+"</a>\n" +
+                                "                                            <span><i class=\"entypo-globe\"></i>&nbsp;"+new Date(es.discusstime).toLocaleDateString()+new Date(es.discusstime).toLocaleTimeString()+"</span>\n" +
+                                "                                            <span>\n" +
+                                "                                            </span>\n" +
+                                "                                        </h3>\n" +
+                                "                                    </div>\n" +
+                                "\n" +
+                                "                                    <p>"+es.discussmsg+"</p>\n" +
+                                "                                    <!-- Nested media object -->\n" +
+                                "\n" +
+                                "                                    <!-- Nested media object -->\n" +
+                                "                                </div>\n" +
+                                "\n" +
+                                "                            </li>")
+
+                        })
+                    })
+
+
+                }
+            }
+
+        })
+
+    })
+</script>
+<script>
+
+    function adds(rel) {
+
+
+        var params = {
+            //博客id
+            todiscussid:rel,
+            content:$("textarea[id='"+rel+"']").val()
+
+        }
+        $.ajax({
+
+            url:"addDiscuss",
+            type:"get",
+            data:params,
+            statusCode:{
+
+                201:function (rel) {
+
+                    alert("评论成功!")
+                    //页面回滚
+                    window.location.reload("blog-detail.html")
+
+                },
+                500:function () {
+
+                    alert("服务器异常!")
+                }
+            }
+
+        })
+
+
+    }
+</script>
+
+<body>
+<div id="mymenu"></div>
+    <!-- END OF SIDE MENU -->
+
+
+
+    <!--  PAPER WRAP -->
+    <div class="wrap-fluid">
+        <div class="container-fluid paper-wrap bevel tlbr">
+
+
+
+
+
+            <!-- CONTENT -->
+            <!--TITLE -->
+            <div class="row">
+                <div id="paper-top">
+                    <div class="col-sm-3">
+                        <h2 class="tittle-content-header">
+                            <span class="entypo-newspaper"></span> 
+                            <span>Blog Detail
+                            </span>
+                        </h2>
+
+                    </div>
+
+                    <div class="col-sm-7">
+
+
+                    </div>
+
+                </div>
+            </div>
+            <!--/ TITLE -->
+
+
+
+            <!-- BREADCRUMB -->
+            <ul id="breadcrumb">
+                <li>
+                    <span class="entypo-home"></span>
+                </li>
+                <li><i class="fa fa-lg fa-angle-right"></i>
+                </li>
+                <li><a href="#" title="Sample page 1">Blog App</a>
+                </li>
+                <li><i class="fa fa-lg fa-angle-right"></i>
+                </li>
+                <li><a href="#" title="Sample page 1">Blog Detail</a>
+                </li>
+                <li class="pull-right">
+                    <div class="input-group" style="margin:-7px 30px 0 0">
+
+                        <input style="border-radius:15px" type="text" placeholder="Search..." class="form-control">
+                    </div>
+                </li>
+            </ul>
+
+            <!-- END OF BREADCRUMB -->
+
+            <!--CONTENT-->
+            <div class="row" style="margin-top:30px;padding:0 15px;">
+                <!--  BLOG CONTENT -->
+                <div class="col-sm-8">
+
+
+
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+                <!--  END OF BLOG CONTENT -->
+
+                <!--  BLOG SIDE CONTENT -->
+                <div class="col-sm-4">
+
+
+                    <div class="blog-side-nest" id="hots">
+                        <h4 class="text-left">POPULAR POST</h4>
+                        <hr style="margin:0">
+
+                        <!--  热门博客  -->
+
+
+                        <br>
+
+
+                    </div>
+
+                    <div class="blog-side-nest">
+                     <h4 class="text-left">TAG</h4>
+                        <hr style="margin:0">
+                        <ul class="list-inline" id="blog_key">
+
+                        </ul>
+                    </div>
+                </div>
+                <!--  END OF BLOG SIDE CONTENT -->
+            </div>
+
+
+            <!-- /END OF CONTENT -->
+
+
+
+            <!-- FOOTER -->
+            <div class="footer-space"></div>
+            <div id="footer">
+                <div class="devider-footer-left"></div>
+                <div class="time">
+                    <p id="spanDate">
+                    <p id="clock">
+                </div>
+                <div class="copyright">Make with Love
+                     <span class="entypo-heart"></span>Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a> All Rights Reserved</div>
+                <div class="devider-footer"></div>
+
+            </div>
+            <!-- / END OF FOOTER -->
+
+
+        </div>
+    </div>
+    <!--  END OF PAPER WRAP -->
+
+    <!-- RIGHT SLIDER CONTENT -->
+    <div class="sb-slidebar sb-right">
+        <div class="right-wrapper">
+            <div class="row">
+                <h3>
+                    <span><i class="entypo-gauge"></i>&nbsp;&nbsp;MAIN WIDGET</span>
+                </h3>
+                <div class="col-sm-12">
+
+                    <div class="widget-knob">
+                        <span class="chart" style="position:relative" data-percent="86">
+                            <span class="percent"></span>
+                        </span>
+                    </div>
+                    <div class="widget-def">
+                        <b>Distance traveled</b>
+                        <br>
+                        <i>86% to the check point</i>
+                    </div>
+
+                    <div class="widget-knob">
+                        <span class="speed-car" style="position:relative" data-percent="60">
+                            <span class="percent2"></span>
+                        </span>
+                    </div>
+                    <div class="widget-def">
+                        <b>The average speed</b>
+                        <br>
+                        <i>30KM/h avarage speed</i>
+                    </div>
+
+
+                    <div class="widget-knob">
+                        <span class="overall" style="position:relative" data-percent="25">
+                            <span class="percent3"></span>
+                        </span>
+                    </div>
+                    <div class="widget-def">
+                        <b>Overall result</b>
+                        <br>
+                        <i>30KM/h avarage Result</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:0;" class="right-wrapper">
+            <div class="row">
+                <h3>
+                    <span><i class="entypo-chat"></i>&nbsp;&nbsp;CHAT</span>
+                </h3>
+                <div class="col-sm-12">
+                    <span class="label label-warning label-chat">Online</span>
+                    <ul class="chat">
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-circle" src="http://api.randomuser.me/portraits/thumb/men/20.jpg">
+                                </span><b>Dave Junior</b>
+                                <br><i>Last seen : 08:00 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-circle" src="http://api.randomuser.me/portraits/thumb/men/21.jpg">
+                                </span><b>Kenneth Lucas</b>
+                                <br><i>Last seen : 07:21 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-circle" src="http://api.randomuser.me/portraits/thumb/men/22.jpg">
+                                </span><b>Heidi Perez</b>
+                                <br><i>Last seen : 05:43 PM</i>
+                            </a>
+                        </li>
+
+
+                    </ul>
+
+                    <span class="label label-chat">Offline</span>
+                    <ul class="chat">
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/men/23.jpg">
+                                </span><b>Dave Junior</b>
+                                <br><i>Last seen : 08:00 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/women/24.jpg">
+                                </span><b>Kenneth Lucas</b>
+                                <br><i>Last seen : 07:21 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/men/25.jpg">
+                                </span><b>Heidi Perez</b>
+                                <br><i>Last seen : 05:43 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/women/25.jpg">
+                                </span><b>Kenneth Lucas</b>
+                                <br><i>Last seen : 07:21 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                    <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/men/26.jpg">
+                                </span><b>Heidi Perez</b>
+                                <br><i>Last seen : 05:43 PM</i>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END OF RIGHT SLIDER CONTENT-->
+
+    <script>
+    // Basic FitVids Test
+    $(".blog-list-nest").fitVids();
+    // Custom selector and No-Double-Wrapping Prevention Test
+    $(".blog-list-nest").fitVids({
+        customSelector: "iframe[src^='http://socialcam.com']"
+    });
+    </script>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

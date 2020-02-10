@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Apricot 1.3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le styles -->
+    <script type="text/javascript" src="assets/js/jquery.js"></script>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/loader-style.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+
+    <link rel="stylesheet" href="assets/css/profile.css">
+
+
+
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/minus.png">
+</head>
+<script>
+
+    $(function () {
+        //给当前页面上传时间
+        $("li[id='Dates']").html(new Date().toLocaleDateString())
+
+        setInterval(function(){
+
+            var now = new Date();
+            $("li[class='hours']").html(now.getHours())
+            $("li[class='mins']").html(now.getMinutes())
+            $("li[class='secs']").html(now.getSeconds())
+
+
+        },1000);
+
+    })
+</script>
+<script>
+    //页面加载完毕,去后台获取登录的用户
+    $.ajax({
+
+        url:"getUser",
+        type:"get",
+        dataType:"json",
+        statusCode:{
+
+            200:function (rel) {
+
+                // 中间模板拼接
+                $("div[class='col-sm-7']").append(" <div class=\"devider-vertical visible-lg\"></div>\n" +
+                    "                        <div class=\"tittle-middle-header\">\n" +
+                    "\n" +
+                    "                            <div class=\"alert\">\n" +
+                    "                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>\n" +
+                    "                                <span class=\"tittle-alert entypo-info-circled\"></span>\n" +
+                    "                                Welcome back,&nbsp;\n" +
+                    "                                <strong>"+rel.username+"</strong>&nbsp;&nbsp;\n" +
+                    "                            </div>\n" +
+                    "\n" +
+                    "\n" +
+                    "                        </div>")
+
+
+                // 左侧面板资料拼接
+                $("div[id='left_profile']").append("<ul class=\"list-group\">\n" +
+                    "                                        <li class=\"list-group-item text-left\">\n" +
+                    "                                            <span class=\"entypo-user\"></span>&nbsp;&nbsp;Profile</li>\n" +
+                    "                                        <li class=\"list-group-item text-center\">\n" +
+                    "                                            <img src=\""+rel.userphoto+"\" alt=\"\" class=\"img-circle img-responsive img-profile\">\n" +
+                    "\n" +
+                    "                                        </li>\n" +
+                    "                                        <li class=\"list-group-item text-center\">\n" +
+                    "\n" +
+                    "\n" +
+                    "\n" +
+                    "                                            <div class=\"ratings\">\n" +
+                    "\n" +
+                    "                                                <a href=\"#\">\n" +
+                    "                                                    <span class=\"fa fa-star\"></span>\n" +
+                    "                                                </a>\n" +
+                    "                                                <a href=\"#\">\n" +
+                    "                                                    <span class=\"fa fa-star\"></span>\n" +
+                    "                                                </a>\n" +
+                    "                                                <a href=\"#\">\n" +
+                    "                                                    <span class=\"fa fa-star\"></span>\n" +
+                    "                                                </a>\n" +
+                    "                                                <a href=\"#\">\n" +
+                    "                                                    <span class=\"fa fa-star\"></span>\n" +
+                    "                                                </a>\n" +
+                    "                                                <a href=\"#\">\n" +
+                    "                                                    <span class=\"fa fa-star-o\"></span>\n" +
+                    "                                                </a>\n" +
+                    "\n" +
+                    "                                            </div>\n" +
+                    "\n" +
+                    "\n" +
+                    "                                        </li>\n" +
+                    "\n" +
+                    "                                        <li class=\"list-group-item text-right\">\n" +
+                    "                                            <span class=\"pull-left\">\n" +
+                    "                                                <strong>Joined</strong>\n" +
+                    "                                            </span>"+new Date(rel.userregister).toLocaleDateString()+"</li>\n" +
+                    "                                        <li class=\"list-group-item text-right\">\n" +
+                    "                                            <span class=\"pull-left\">\n" +
+                    "                                                <strong>IP</strong>\n" +
+                    "                                            </span>"+rel.userip+"</li>\n" +
+                    "                                        <li class=\"list-group-item text-right\">\n" +
+                    "                                            <span class=\"pull-left\">\n" +
+                    "                                                <strong>Nickname</strong>\n" +
+                    "                                            </span>"+rel.usernickname+"</li>\n" +
+                    "\n" +
+                    "                                    </ul>")
+
+
+                //右侧资料面板
+                $("div[id='right_profile']").append("<h2>"+rel.username+"\n" +
+                    "                                    <span class=\"pull-right social-profile\">\n" +
+
+                    "                                            <span id='s01'><i class=\"entypo-facebook-circled\"></i></span><span id='s02'><i class=\"entypo-twitter-circled\"></i></span><span id='s03'><i class=\"entypo-linkedin-circled\"></i></span><span id='s04'><i class=\"entypo-github-circled\"></i></span><span id='s05'><i class=\"entypo-gplus-circled\"></i></span>\n" +
+                    "                                        </span>\n" +
+                    "                                    </h2>\n" +
+                    "                                    <hr>\n" +
+                    "\n" +
+                    "                                    <dl class=\"dl-horizontal-profile\">\n" +
+                    "                                        <dt>User Id</dt>\n" +
+                    "                                        <dd>"+rel.userid+"</dd>\n" +
+                    "\n" +
+                    "                                        <dt>Name</dt>\n" +
+                    "                                        <dd>"+rel.userflname+"</dd>\n" +
+                    "\n" +
+                    "                                        <dt>Email</dt>\n" +
+                    "                                        <dd>"+rel.useremail+"</dd>\n" +
+                    "\n" +
+                    "                                        <dt>Phone</dt>\n" +
+                    "                                        <dd>******</dd>\n" +
+                    "\n" +
+                    "                                        <dt>Active Periode</dt>\n" +
+                    "                                        <dd>"+new Date(rel.userap).toLocaleDateString()+"</dd>\n" +
+                    "\n" +
+                    "                                        <dt>Last Update</dt>\n" +
+                    "                                        <dd>"+new Date(rel.userlp).toLocaleDateString()+"</dd>\n" +
+                    "\n" +
+                    "\n" +
+                    "                                        <dt>Hobbies</dt>\n" +
+                    "                                        <dd>"+rel.userhobby+"</dd>\n" +
+                    "\n" +
+                    "                                        <dt>Skills</dt>\n" +
+                    "                                        <dd id='myskill'>\n" +
+                    "                                            <span class=\"tags\">html5</span>\n" +
+                    "                                            <span class=\"tags\">css3</span>\n" +
+                    "                                            <span class=\"tags\">jquery</span>\n" +
+                    "                                            <span class=\"tags\">bootstrap3</span>\n" +
+                    "                                        </dd>\n" +
+                    "\n" +
+                    "                                    </dl>")
+
+
+
+
+                //获取到用户的技能
+                var skill =rel.userskills
+
+                var skills = skill.split(",")
+
+                //先清空里面的内容
+                $("dd[id='myskill']").html("")
+
+                //遍历拼接关于skill的内容
+                for (var i = 0; i < skills.length; i++) {
+
+                    $("dd[id='myskill']").append("<span class=\"tags\">"+skills[i]+"</span>")
+
+                }
+
+
+                //根据当前用户账号的注册类型进行图标的点亮
+                //点亮图标
+                if (rel.usertypeid ==1){
+
+                    $("span[id='s01']").html(" <a href=\"#\">\n" +
+                        "                                    <span class=\"entypo-facebook-circled\"></span>\n" +
+                        "                                </a>")
+                }
+
+                if (rel.usertypeid ==2){
+                    $("span[id='s02']").html("<a class=\"tweet-link\" href=\"#\">\n" +
+                        "                                    <span class=\"entypo-twitter-circled\"></span>\n" +
+                        "                                </a>\n")
+                }
+
+                if (rel.usertypeid ==4){
+                    $("span[id='s03']").html("   <a class=\"gplus-textcolor\" href=\"#\">\n" +
+                        "                                    <span class=\"entypo-instagrem\"></span>\n" +
+                        "                                </a>\n")
+                }
+
+
+
+
+            },
+
+
+
+            500:function () {
+
+                alert("服务器异常!")
+            }
+
+        }
+    })
+
+    /**
+     *  但注销按钮被点击时触发该事件
+     */
+    function exits() {
+
+        $.ajax({
+
+            url:"logout",
+            type:"get",
+            statusCode:{
+
+                204:function () {
+
+                    alert("注销成功!")
+                    window.location.href="login.html"
+
+                },
+                500:function () {
+
+                    alert("服务器异常!")
+                }
+            }
+        })
+
+    }
+
+    /**
+     * 鼠标脱离焦点时触发,
+     */
+    function checkPas() {
+
+        var p1 = $("input[name='userpassword']").val()
+        var p2= $("input[name='repassword']").val()
+
+        if (p1===p2){
+            //两次密码输入的一致
+           $("div[id='checkInfo']").html("<font color='green'>两次密码输入一致!</font>")
+
+        }else{
+            //两次密码输入的不一致
+            $("div[id='checkInfo']").html("<font color='red'>两次密码输入不一致!</font>")
+
+        }
+
+    }
+
+    /**
+     * 更新用户信息
+     */
+
+
+    function updateUser(){
+
+        //1.准备一个FormData对象,用来封装表单数据
+        var data=new FormData();
+        //2.获取上传文件--files是file控件的隐藏属性
+        var files=$("#file1").prop("files");
+        data.append("files",files[0]);
+
+        //3.获取其余的元素
+        data.append("userflname",$("input[name='userflname']").val())
+        data.append("useremail",$("input[name='useremail']").val())
+        data.append("usernickname",$("input[name='usernickname']").val())
+        data.append("userpassword",$("input[name='userpassword']").val())
+
+
+        $.ajax({
+
+            url:"updateUser",
+            type:"POST",
+            dataType:"JSON",
+            data:data,
+
+            //上传图片需要在发送ajax时写以下三个属性
+            cache:false,
+            processData:false,
+            contentType:false,
+
+            statusCode:{
+
+                204:function () {
+
+                    alert("更新成功!")
+                    //页面重新加载
+                    window.location.reload("profile.html")
+
+                },
+                500:function () {
+
+                    alert("服务器异常!")
+
+                }
+            }
+
+        })
+    }
+
+
+</script>
+<script>
+
+    $(function () {
+
+        $("div[id='mymenu']").load("model.html")
+
+    })
+</script>
+
+
+
+<body>
+
+<div id="mymenu"></div>
+    <!-- END OF SIDE MENU -->
+
+
+
+    <!--  PAPER WRAP -->
+    <div class="wrap-fluid">
+        <div class="container-fluid paper-wrap bevel tlbr">
+
+            <!-- CONTENT -->
+            <!--TITLE -->
+            <div class="row">
+                <div id="paper-top">
+                    <div class="col-sm-3">
+                        <h2 class="tittle-content-header">
+                            <i class="icon-media-record"></i> 
+                            <span>Blank Page
+                            </span>
+                        </h2>
+
+                    </div>
+
+                    <div class="col-sm-7">
+
+
+                    </div>
+
+                </div>
+            </div>
+            <!--/ TITLE -->
+
+            <!-- BREADCRUMB -->
+            <ul id="breadcrumb">
+                <li>
+                    <span class="entypo-home"></span>
+                </li>
+                <li><i class="fa fa-lg fa-angle-right"></i>
+                </li>
+                <li><a href="#" title="Sample page 1">Extra Pages</a>
+                </li>
+                <li><i class="fa fa-lg fa-angle-right"></i>
+                </li>
+                <li><a href="#" title="Sample page 1">Blank Page</a>
+                </li>
+            </ul>
+
+            <!-- END OF BREADCRUMB -->
+
+            <div class="content-wrap">
+                <!-- PROFILE -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="well profile">
+                            <div class="col-sm-12">
+
+                                <!--   左侧面板   -->
+                                <div id="left_profile" class="col-xs-12 col-sm-4 text-center">
+
+
+
+                                </div>
+
+                                <!--  右侧面板  -->
+                                <div id="right_profile" class="col-xs-12 col-sm-8 profile-name">
+
+
+
+                                </div>
+
+                            </div>
+                            <div class="col-xs-12 divider text-center">
+                                <div class="col-xs-12 col-sm-4 emphasis">
+                                    <h2>
+                                        <strong>20,7K</strong>
+                                    </h2>
+                                    <p>
+                                        <small>Followers</small>
+                                    </p>
+                                    <button class="btn btn-success btn-block">
+                                        <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;Follow</button>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 emphasis">
+                                    <h2>
+                                        <strong>245</strong>
+                                    </h2>
+                                    <p>
+                                        <small>Following</small>
+                                    </p>
+                                    <button class="btn btn-info btn-block">
+                                        <span class="fa fa-user"></span>&nbsp;&nbsp;View Profile</button>
+                                </div>
+                                <div class="col-sm-4 emphasis">
+                                    <h2>
+                                        <strong>43</strong>
+                                    </h2>
+                                    <p>
+                                        <small>Likes</small>
+                                    </p>
+                                    <button class="btn btn-default btn-block">
+                                        <span class="fa fa-user"></span>&nbsp;&nbsp;Likes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row">
+
+
+                        <div class="col-sm-12">
+                            <!-- BLANK PAGE-->
+
+                            <div style="margin:-20px 15px;" class="nest" id="Blank_PageClose">
+                                <div class="title-alt">
+
+                                    <!--  锚点定位的地方  -->
+
+                                    <a name="update"></a>
+                                    <h6>
+                                        Edit Profile</h6>
+                                    <div class="titleClose">
+                                        <a class="gone" href="#Blank_PageClose">
+                                            <span class="entypo-cancel"></span>
+                                        </a>
+                                    </div>
+                                    <div class="titleToggle">
+                                        <a class="nav-toggle-alt" href="#Blank_Page_Content">
+                                            <span class="entypo-up-open"></span>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                                <div class="body-nest" id="Blank_Page_Content">
+
+
+
+
+                                    <div class="row">
+
+
+                                        <!-- left column -->
+                                        <div class="col-md-3">
+                                            <div class="text-center">
+                                                <img id="img1" src="http://placehold.it/150" style="height: 150px;width: 150px" class="avatar img-circle" alt="avatar">
+                                                <h6>Upload a different photo...</h6>
+
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <span class="btn btn-primary btn-file">
+                                                            Browse
+                                                            <input id="file1" name="files" type="file" multiple="">
+                                                        </span>
+                                                    </span>
+                                                    <input type="text" class="form-control">
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <!-- edit form column
+                                             编辑用的表单
+                                                        -->
+                                        <div class="col-md-9 personal-info">
+                                            <div class="alert alert-info alert-dismissable">
+                                                <a class="panel-close close" data-dismiss="alert">×</a> 
+                                                <i class="fa fa-coffee"></i>
+                                                This is an
+                                                <strong>.alert</strong>. Use this to show important messages to the user.
+
+                                            </div>
+                                            <h3>Personal info</h3>
+
+                                            <form id="editInfo" class="form-horizontal" role="form">
+
+
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Nickname:</label>
+                                                    <div class="col-lg-8">
+                                                        <input class="form-control" name="usernickname" type="text">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Email:</label>
+                                                    <div class="col-lg-8">
+                                                        <input class="form-control" name="useremail" value="" type="text">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">Userflname:</label>
+                                                    <div class="col-md-8">
+                                                        <input class="form-control" name="userflname"  type="text">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">Password:</label>
+                                                    <div class="col-md-8">
+                                                        <input class="form-control" name="userpassword" value="" type="password">
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">Confirm password:</label>
+                                                    <div class="col-md-8">
+                                                        <input class="form-control" onblur="checkPas()" name="repassword"  type="password">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label"></label>
+                                                    <div class="col-md-8" id="checkInfo">
+
+                                                            <!--此处显示提示信息-->
+
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label"></label>
+                                                    <div class="col-md-8">
+                                                        <input class="btn btn-primary" onclick="updateUser()" value="Save Changes" type="button">
+                                                        <span></span>
+                                                        <input class="btn btn-default" value="Cancel" type="reset">
+                                                    </div>
+                                                </div>
+
+
+                                            </form>
+
+                                            <script type="text/javascript">
+                                                //上传图片回显在页面上
+                                                $("#file1").change(function() {
+                                                    var objUrl = getObjectURL(this.files[0]);
+                                                    console.log("objUrl = " + objUrl);
+                                                    if (objUrl) {
+                                                        $("#img1").attr("src", objUrl);
+                                                    }
+                                                });
+
+                                                //建立一個可存取到該file的url
+                                                function getObjectURL(file) {
+                                                    var url = null;
+                                                    if (window.createObjectURL != undefined) { // basic
+                                                        url = window.createObjectURL(file);
+                                                    } else if (window.URL != undefined) { // mozilla(firefox)
+                                                        url = window.URL.createObjectURL(file);
+                                                    } else if (window.webkitURL != undefined) { // webkit or chrome
+                                                        url = window.webkitURL.createObjectURL(file);
+                                                    }
+                                                    return url;
+                                                }
+                                            </script>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END OF BLANK PAGE -->
+
+                    </div>
+                </div>
+                <!-- END OF PROFILE -->
+
+
+                <!-- /END OF CONTENT -->
+
+
+
+                <!-- FOOTER -->
+                <div class="footer-space"></div>
+                <div id="footer">
+                    <div class="devider-footer-left"></div>
+                    <div class="time">
+                        <p id="spanDate">
+                        <p id="clock">
+                    </div>
+                    <div class="copyright">Make with Love
+                        <span class="entypo-heart"></span>Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a> All Rights Reserved</div>
+                    <div class="devider-footer"></div>
+
+                </div>
+                <!-- / END OF FOOTER -->
+
+
+            </div>
+        </div>
+        <!--  END OF PAPER WRAP -->
+
+        <!-- RIGHT SLIDER CONTENT -->
+        <div class="sb-slidebar sb-right">
+            <div class="right-wrapper">
+                <div class="row">
+                    <h3>
+                        <span><i class="entypo-gauge"></i>&nbsp;&nbsp;MAIN WIDGET</span>
+                    </h3>
+                    <div class="col-sm-12">
+
+                        <div class="widget-knob">
+                            <span class="chart" style="position:relative" data-percent="86">
+                                <span class="percent"></span>
+                            </span>
+                        </div>
+                        <div class="widget-def">
+                            <b>Distance traveled</b>
+                            <br>
+                            <i>86% to the check point</i>
+                        </div>
+
+                        <div class="widget-knob">
+                            <span class="speed-car" style="position:relative" data-percent="60">
+                                <span class="percent2"></span>
+                            </span>
+                        </div>
+                        <div class="widget-def">
+                            <b>The average speed</b>
+                            <br>
+                            <i>30KM/h avarage speed</i>
+                        </div>
+
+
+                        <div class="widget-knob">
+                            <span class="overall" style="position:relative" data-percent="25">
+                                <span class="percent3"></span>
+                            </span>
+                        </div>
+                        <div class="widget-def">
+                            <b>Overall result</b>
+                            <br>
+                            <i>30KM/h avarage Result</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:0;" class="right-wrapper">
+                <div class="row">
+                    <h3>
+                        <span><i class="entypo-chat"></i>&nbsp;&nbsp;CHAT</span>
+                    </h3>
+                    <div class="col-sm-12">
+                        <span class="label label-warning label-chat">Online</span>
+                        <ul class="chat">
+                            <li>
+                                <a href="#">
+                                    <span>
+                                        <img alt="" class="img-chat img-circle" src="http://api.randomuser.me/portraits/thumb/men/20.jpg">
+                                    </span><b>Dave Junior</b>
+                                    <br><i>Last seen : 08:00 PM</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span>
+                                        <img alt="" class="img-chat img-circle" src="http://api.randomuser.me/portraits/thumb/men/21.jpg">
+                                    </span><b>Kenneth Lucas</b>
+                                    <br><i>Last seen : 07:21 PM</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span>
+                                        <img alt="" class="img-chat img-circle" src="http://api.randomuser.me/portraits/thumb/men/22.jpg">
+                                    </span><b>Heidi Perez</b>
+                                    <br><i>Last seen : 05:43 PM</i>
+                                </a>
+                            </li>
+
+
+                        </ul>
+
+                        <span class="label label-chat">Offline</span>
+                        <ul class="chat">
+                            <li>
+                                <a href="#">
+                                    <span>
+                                        <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/men/23.jpg">
+                                    </span><b>Dave Junior</b>
+                                    <br><i>Last seen : 08:00 PM</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span>
+                                        <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/women/24.jpg">
+                                    </span><b>Kenneth Lucas</b>
+                                    <br><i>Last seen : 07:21 PM</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span>
+                                        <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/men/25.jpg">
+                                    </span><b>Heidi Perez</b>
+                                    <br><i>Last seen : 05:43 PM</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span>
+                                        <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/women/25.jpg">
+                                    </span><b>Kenneth Lucas</b>
+                                    <br><i>Last seen : 07:21 PM</i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span>
+                                        <img alt="" class="img-chat img-offline img-circle" src="http://api.randomuser.me/portraits/thumb/men/26.jpg">
+                                    </span><b>Heidi Perez</b>
+                                    <br><i>Last seen : 05:43 PM</i>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- END OF RIGHT SLIDER CONTENT-->
+
+
+        <!-- MAIN EFFECT -->
+
+
+</div><div align="right">
+    <a class='__cl_weblink' href=
+            'http://stormor.ai/web/chatbot.html?uid=957&key=4f2f242288af11b36852f6f3a3dc67fc' target='_blank'>
+        <img src='http://stormor.ai/web/access_code_icon.jpg'></img></a>
+</div></body>
+
+</html>
